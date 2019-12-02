@@ -9,15 +9,16 @@
 // base (boilerplate code)
 
 // @import 'base/reset';
-//@import 'base/base';
+@import 'base/base';
 
 
 // layout (everything that takes part in laying out the site)
 
-@import 'layout/layout';
+//@import 'layout/layout';
 
 // component (for smaller components like buttons, carousel, widgets, loader)
-
+@import "components/wp-classes";
+@import "components/navigation";
 
 
 //page (page-specific styles)

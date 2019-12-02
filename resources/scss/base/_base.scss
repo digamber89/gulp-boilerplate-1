@@ -1,0 +1,16 @@
+img,
+video {
+  height: auto; /* Make sure images are scaled correctly. */
+  max-width: 100%; /* Adhere to container width. */
+}
+
+body {
+  word-wrap: break-word;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #000;
+  a{
+    color: #000;
+  }
+}
