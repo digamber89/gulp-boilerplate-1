@@ -25,7 +25,7 @@ const concat = require('gulp-concat');  //concatenates multiple js files
 const rename = require('gulp-rename'); // Renames files E.g. style.css -> style.min.css
 const plumber = require('gulp-plumber');
 const postcss = require('gulp-postcss');
-const cssnano = require('cssnano');
+const cleanCSS = require('gulp-clean-css');
 const autoprefixer = require('autoprefixer');
 
 
@@ -56,9 +56,19 @@ function compileMinifiedStyles() {
         .pipe(sass({
             includePaths: ['node_modules/bootstrap/scss/']
         }))
-        .pipe(postcss([autoprefixer, cssnano]))
-        .pipe(sourcemaps.write('./maps'))
+        .pipe(postcss([autoprefixer()]))
+        .pipe(cleanCSS({
+            level: {
+                1: {
+                    cleanupCharsets: true,
+                    removeEmpty: true,
+                    removeWhitespace: true,
+                    specialComments: 0
+                }
+            }
+        }))
         .pipe(rename({suffix: '.min'}))
+        .pipe(sourcemaps.write('./maps'))
         .pipe(dest(stylesDestination))
         .pipe(notify({message: 'TASK: "styles" Completed! 💯', onLast: true}));
 }
