@@ -53,9 +53,7 @@ function compileMinifiedStyles() {
     return src(stylesSource)
         .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
         .pipe(sourcemaps.init())
-        .pipe(sass({
-            includePaths: ['node_modules/bootstrap/scss/']
-        }))
+        .pipe(sass())
         .pipe(postcss([autoprefixer()]))
         .pipe(cleanCSS({
             level: {
@@ -77,9 +75,7 @@ function compileUnminifiedStyles() {
     return src(stylesSource)
         .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
         .pipe(sourcemaps.init())
-        .pipe(sass({
-            includePaths: ['node_modules/bootstrap/scss/']
-        }))
+        .pipe(sass())
         .pipe(postcss([autoprefixer]))
         .pipe(sourcemaps.write('./maps'))
         .pipe(dest(stylesDestination))
