@@ -2,7 +2,7 @@
 	This is a learner template , intended to be very easy to use
 	Only two simple tasks are done right now
 	1) Take .scss file from assets/style.scss can be changed via let stylesSource. Compile it, generate sourcemap and generate a non-minified and minified version and save it in css folder in the root of the project
-	2) Take .js files located in .assets/js/vendor and .assets/js/custom and 
+	2) Take .js files located in .assets/js/vendor and .assets/js/custom and
 		i) concat (join) all js files
 		ii) minify them (see note for problems with minification)
 		iii) save them to /js/ folder in the root of the file
@@ -16,6 +16,7 @@ To Do List
 */
 
 const {src, dest, watch, parallel, series} = require('gulp');
+const del = require('del');// del
 const sass = require('gulp-sass'); // compiles SASS to CSS
 const sourcemaps = require('gulp-sourcemaps'); // generate css source maps
 const notify = require('gulp-notify'); // provides notification to use once task is complete
@@ -24,20 +25,24 @@ const concat = require('gulp-concat');  //concatenates multiple js files
 const rename = require('gulp-rename'); // Renames files E.g. style.css -> style.min.css
 const plumber = require('gulp-plumber');
 const postcss = require('gulp-postcss');
-const cssnano = require('cssnano');
+const cleanCSS = require('gulp-clean-css');
 const autoprefixer = require('autoprefixer');
 
 
 let stylesSource = './resources/scss/**/*.scss';
 let stylesDestination = './assets/css';
 let jsVendorSource = './resources/js/vendor/*.js';
-let jsVendorDestination = './js';
+let jsVendorDestination = './assets/js';
 let jsVendorFile = 'vendor';
 
 let jsCustomSource = './resources/js/custom/*.js';
 let jsCustomDestination = './assets/js';
 let jsCustomFile = 'main';
 
+function cleanStyles(cb) {
+    del([stylesDestination + '/maps', stylesDestination + '/main.css', stylesDestination + '/main.min.css']);
+    cb();
+}
 
 /*
 	takes style.scss ,
@@ -48,12 +53,20 @@ function compileMinifiedStyles() {
     return src(stylesSource)
         .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
         .pipe(sourcemaps.init())
-        .pipe(sass({
-            includePaths: ['node_modules/bootstrap/scss/']
+        .pipe(sass())
+        .pipe(postcss([autoprefixer()]))
+        .pipe(cleanCSS({
+            level: {
+                1: {
+                    cleanupCharsets: true,
+                    removeEmpty: true,
+                    removeWhitespace: true,
+                    specialComments: 0
+                }
+            }
         }))
-        .pipe(postcss([autoprefixer, cssnano]))
-        .pipe(sourcemaps.write('./maps'))
         .pipe(rename({suffix: '.min'}))
+        .pipe(sourcemaps.write('./maps'))
         .pipe(dest(stylesDestination))
         .pipe(notify({message: 'TASK: "styles" Completed! 💯', onLast: true}));
 }
@@ -62,9 +75,7 @@ function compileUnminifiedStyles() {
     return src(stylesSource)
         .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
         .pipe(sourcemaps.init())
-        .pipe(sass({
-            includePaths: ['node_modules/bootstrap/scss/']
-        }))
+        .pipe(sass())
         .pipe(postcss([autoprefixer]))
         .pipe(sourcemaps.write('./maps'))
         .pipe(dest(stylesDestination))
@@ -102,11 +113,9 @@ function compileCustomJS() {
         .pipe(notify({message: 'TASK: "compileCustomJS" Completed! 💯', onLast: true}));
 }
 
-exports.compileVendorJS = compileVendorJS;
-exports.compileCustomJS = compileCustomJS;
-    exports.default = parallel(compileUnminifiedStyles, compileMinifiedStyles, compileVendorJS, compileCustomJS, (done) => {
-    watch(stylesSource, parallel(compileUnminifiedStyles, compileUnminifiedStyles));
-    watch(jsVendorSource, compileVendorJS);
-    watch(jsCustomSource, compileCustomJS);
+exports.default = function (done) {
+    watch(stylesSource, {ignoreInitial: false}, series(cleanStyles, compileMinifiedStyles, compileUnminifiedStyles));
+    watch(jsVendorSource, {ignoreInitial: false}, compileVendorJS);
+    watch(jsCustomSource, {ignoreInitial: false}, compileCustomJS);
     done();
-});
+};

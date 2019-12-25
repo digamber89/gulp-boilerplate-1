@@ -2,6 +2,11 @@
 
 Bootstrap is used via NPM and all overrides are done via theme. I have included the entire bootstrap theme at the moment but you can choose to use something else.
 
+##Styles
+All styles will go under your-theme-name/resources/scss
+
+## Vendor JS
+All Vendor JS files will go under your-theme-name/js/
 
 Suggested way of including theme
 ```
