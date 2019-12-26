@@ -95,14 +95,21 @@
         display: flex;
         width: 100%;
       }
+      & > li{
+        @include media-breakpoint-up(lg){
+          width: 20%;
+        }
+      }
       li {
         padding: 0;
         margin-bottom: 10px;
         cursor: pointer;
-        min-width: 200px;
         position: relative;
         @include media-breakpoint-up(lg) {
           margin-bottom: 0;
+        }
+        @include media-breakpoint-down(lg){
+          min-width: 200px;
         }
         a {
           background: transparent;

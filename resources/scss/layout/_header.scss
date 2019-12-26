@@ -1,4 +1,10 @@
-header#masthead{
+header#masthead {
   padding: 20px 0;
   box-shadow: 0 0 4px 0 #ccc;
+  .main-navigation {
+    @include media-breakpoint-down(lg){
+      float: right;
+      display: inline-block;
+    }
+  }
 }
