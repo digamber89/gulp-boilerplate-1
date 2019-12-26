@@ -2,30 +2,57 @@
     var COMMON = {
         init: function () {
             this.cacheDOM();
-
             $(window).on('resize', this.reCalcOnResize.bind(this))
         },
         cacheDOM: function () {
             this.$body = $('body');
             this.windowWidth = $(window).width();
+
         },
         reCalcOnResize: function () {
             this.windowWidth = $(window).width();
         }
     };
 
+    var siteHeader = {
+        init: function () {
+            this.$header = COMMON.$body.find('#masthead');
+
+            this.headerHeight = 0;
+            this.calcHeaderSize();
+
+            $(window).on('resize', this.calcHeaderSize.bind(this));
+            $(window).on('scroll', this.stickyHeader.bind(this));
+        },
+        calcHeaderSize: function () {
+            this.headerHeight = this.$header.outerHeight();
+            this.$header.css('height', this.headerHeight);
+        },
+        stickyHeader: function () {
+            var scrollTop = $(window).scrollTop();
+            if (COMMON.windowWidth <= 600) {
+                if (scrollTop > 32) {
+                    this.$header.addClass('stick-to-top');
+                } else {
+                    this.$header.removeClass('stick-to-top');
+                }
+            }
+
+        }
+    };
+
     var mainNavigation = {
-        init: function(){
+        init: function () {
             this.$body = $('body');
             this.$mainNav = this.$body.find('.main-navigation');
             this.$menuContainer = this.$mainNav.find('.menu-primary-menu-container');
             this.$menuToggler = this.$mainNav.find('.menu-toggle');
 
-            this.$menuToggler.on('click',this.toggleMenu.bind(this));
-            this.$menuContainer.find('.sub-menu-toggle').on('click',this.showSubMenu.bind(this));
-            this.$body.on('click',this.closeMenu.bind(this))
+            this.$menuToggler.on('click', this.toggleMenu.bind(this));
+            this.$menuContainer.find('.sub-menu-toggle').on('click', this.showSubMenu.bind(this));
+            this.$body.on('click', this.closeMenu.bind(this))
         },
-        showSubMenu: function(e){
+        showSubMenu: function (e) {
             $el = $(e.currentTarget);
 
 
@@ -36,17 +63,17 @@
             // this.$menuContainer.find('.sub-menu-toggle').removeClass('sub-menu-shown');
 
         },
-        toggleMenu: function(e){
+        toggleMenu: function (e) {
             $el = $(e.currentTarget);
             this.$menuToggler.toggleClass('active');
             this.$menuContainer.toggleClass('show-menu');
         },
-        closeMenu: function(e){
+        closeMenu: function (e) {
             $el = $(e.currentTarget);
             $clickedElement = $(e.target);
             $foundElement = this.$mainNav.find($clickedElement);
 
-            if( this.$menuContainer.hasClass('show-menu') && $foundElement !== undefined && $foundElement.length === 0 ){
+            if (this.$menuContainer.hasClass('show-menu') && $foundElement !== undefined && $foundElement.length === 0) {
                 this.$menuToggler.removeClass('active');
                 this.$menuContainer.removeClass('show-menu');
             }
@@ -61,6 +88,7 @@
                 console.log('start of page document ready');
                 COMMON.init();
                 mainNavigation.init();
+                siteHeader.init();
             },
             finalize: function () {
                 console.log('at the end of document ready');
@@ -71,8 +99,8 @@
                 console.log('test');
             }
         },
-        'page-template-about':{
-            init: function(){
+        'page-template-about': {
+            init: function () {
                 CM_JS_UTIL.fire('page-template-about', 'slider');
             },
             slider: function () {

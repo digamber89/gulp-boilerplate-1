@@ -1,10 +1,30 @@
+body {
+  &.fixed-header {
+    padding-top: 118px;
+  }
+}
+
 header#masthead {
   padding: 20px 0;
-  box-shadow: 0 0 4px 0 #ccc;
+  box-shadow: 0 2px 4px 0 #ccc;
+  transition: 0.2s all;
   .main-navigation {
-    @include media-breakpoint-down(lg){
-      float: right;
-      display: inline-block;
+    @include media-breakpoint-down(lg) {
+      //float: right;
+      //display: inline-block;
+    }
+  }
+  body.fixed-header & {
+    position: fixed;
+    z-index: 2;
+    background: #fff;
+    top: 0;
+    width: 100%;
+  }
+  body.fixed-header.admin-bar &{
+    top: 32px;
+    &.stick-to-top{
+      top:0;
     }
   }
 }
