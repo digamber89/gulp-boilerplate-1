@@ -14,3 +14,28 @@ h1, h2, h3, h4, h5, h6 {
     color: #000;
   }
 }
+
+#main{
+  padding-top: 20px;
+}
+
+.entry-footer{
+  & > span {
+    margin-right: 10px;
+    position: relative;
+    &:after{
+      content: '';
+      height:100%;
+      width: 1px;
+      background-color: $link-color;
+      position: absolute;
+      top: 0;
+      right: -7px;
+    }
+    &:last-of-type{
+      &:after{
+        display: none;
+      }
+    }
+  }
+}

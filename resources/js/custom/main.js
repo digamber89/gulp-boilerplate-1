@@ -22,12 +22,19 @@
             this.$menuToggler = this.$mainNav.find('.menu-toggle');
 
             this.$menuToggler.on('click',this.toggleMenu.bind(this));
-            this.$menuContainer.find('.sub-menu-toggle').on('click',function(e){
-                $el = $(e.currentTarget);
-                $el.toggleClass('sub-menu-shown');
-                $el.parent().find('> .sub-menu').slideToggle();
-            });
+            this.$menuContainer.find('.sub-menu-toggle').on('click',this.showSubMenu.bind(this));
             this.$body.on('click',this.closeMenu.bind(this))
+        },
+        showSubMenu: function(e){
+            $el = $(e.currentTarget);
+
+
+            $el.toggleClass('sub-menu-shown');
+            $el.parent().find('> .sub-menu').slideToggle();
+
+            // this.$menuContainer.find('.sub-menu').slideUp();
+            // this.$menuContainer.find('.sub-menu-toggle').removeClass('sub-menu-shown');
+
         },
         toggleMenu: function(e){
             $el = $(e.currentTarget);
@@ -38,12 +45,13 @@
             $el = $(e.currentTarget);
             $clickedElement = $(e.target);
             $foundElement = this.$mainNav.find($clickedElement);
-            if( $foundElement !== undefined && $foundElement.length > 0 ){
-                return false;
+
+            if( this.$menuContainer.hasClass('show-menu') && $foundElement !== undefined && $foundElement.length === 0 ){
+                this.$menuToggler.removeClass('active');
+                this.$menuContainer.removeClass('show-menu');
             }
 
-            this.$menuToggler.removeClass('active');
-            this.$menuContainer.removeClass('show-menu');
+
         }
     };
 

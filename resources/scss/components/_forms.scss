@@ -1,5 +1,36 @@
-button, input {
+button {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
   &:focus{
     outline: none;
+  }
+}
+textarea,input{
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  &:focus{
+    outline-color: #ffba80;
+  }
+}
+
+input[type="search"]{
+  appearance: textfield;
+  outline: none;
+}
+
+button, a.button, input[type="button"], input[type="reset"], input[type="submit"] {
+  display: inline-block;
+  font-size: 16px;
+  padding: 5px 30px;
+  color: #ffffff;
+  border-radius: 0;
+  background: $link-color;
+  border: 1px solid $link-color;
+}
+
+.comment-form{
+  label{
+    vertical-align: top;
+    min-width: 200px;
   }
 }
