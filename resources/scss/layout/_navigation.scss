@@ -90,10 +90,10 @@
       padding: 0;
       margin: 0;
       position: relative;
-      width:80%;
+      width: 80%;
       @include media-breakpoint-up(lg) {
         display: flex;
-        width:100%;
+        width: 100%;
       }
       li {
         padding: 0;
@@ -113,24 +113,33 @@
           text-align: left;
           color: #fff;
           text-decoration: none;
-          width:90%;
-          @include media-breakpoint-up(lg){
+          width: 90%;
+          @include media-breakpoint-up(lg) {
             width: 100%;
             text-align: center;
             color: #000;
           }
         }
-        span.sub-menu-toggle{
-          svg{
-            fill:#fff;
-            @include media-breakpoint-up(lg){
-              fill:#000;
+        @include media-breakpoint-up(lg) {
+          &:hover,
+          &.current-menu-item {
+            & > a{
+              //background: rgba(0, 0, 0, 0.25);
+              color: $link-color;
+            }
+          }
+        }
+        span.sub-menu-toggle {
+          svg {
+            fill: #fff;
+            @include media-breakpoint-up(lg) {
+              fill: #000;
             }
           }
           &.sub-menu-shown svg {
             transform: rotate(180deg);
           }
-          @include media-breakpoint-up(lg){
+          @include media-breakpoint-up(lg) {
             position: absolute;
             right: 5%;
             transform: translateY(-50%);
@@ -138,18 +147,12 @@
           }
         }
 
-        @include media-breakpoint-up(lg){
-          &:hover,
-          &.current-menu-item {
-            background: rgba(0, 0, 0, 0.25);
-            color: #fff;
-          }
-        }
+
 
         ul.sub-menu {
           display: none;
           list-style: none;
-          @include media-breakpoint-up(lg){
+          @include media-breakpoint-up(lg) {
             display: block;
             opacity: 0;
             visibility: hidden;
@@ -158,23 +161,38 @@
             right: -100%;
             padding: 0;
             margin: 0;
-            li:hover .sub-menu{
+            box-shadow: 0 0 10px 1px rgba(0, 0, 0, .25);
+            li:hover .sub-menu {
               right: auto;
-              left: -100%;
-              top:0;
+              left: calc( -100% - .5rem);
+              top: 0;
             }
           }
         }
 
         &:hover > ul.sub-menu {
-          @include media-breakpoint-up(lg){
+          @include media-breakpoint-up(lg) {
             opacity: 1;
+            background: #fff;
             visibility: visible;
-            top:100%;
-            right:0;
-            padding-top: 20px;
-            .sub-menu{
-              padding-top: 0;
+            top: calc(100% + 0.5rem);
+            right: 0;
+            &:before {
+              content: '';
+              display: block;
+              bottom: 100%;
+              height: 0.5rem;
+              width: 100%;
+              position: absolute;
+            }
+            .sub-menu {
+              &:before{
+                padding-top: 0;
+                width: .5rem;
+                height: 100%;
+                bottom: 0;
+                right: -.5rem;
+              }
             }
           }
         }
